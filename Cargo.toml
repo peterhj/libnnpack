@@ -1,0 +1,12 @@
+[package]
+name = "nnpack"
+version = "0.1.0"
+authors = ["Peter Jin <peterhaijin@gmail.com>"]
+build = "build.rs"
+
+[lib]
+name = "nnpack"
+path = "src/lib.rs"
+
+[dependencies]
+libc = "*"
