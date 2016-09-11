@@ -102,28 +102,28 @@ pub struct nnp_size {
 #[repr(C)]
 pub struct nnp_padding {
   /** Padding above the image data */
-  top: size_t,
+  pub top: size_t,
   /** Padding on the right of image data */
-  right: size_t,
+  pub right: size_t,
   /** Padding below the image data */
-  bottom: size_t,
+  pub bottom: size_t,
   /** Padding on the left of image data */
-  left: size_t,
+  pub left: size_t,
 }
 
 #[derive(Clone, Copy, Debug)]
 #[repr(C)]
 pub struct nnp_profile {
   /** Time spent inside the function call, in seconds. */
-  total: f64,
+  pub total: f64,
   /** Time spend on transformation of the input or input gradient tensor, in seconds. */
-  input_transform: f64,
+  pub input_transform: f64,
   /** Time spend on transformation of the kernel or kernel gradient tensor, in seconds. */
-  kernel_transform: f64,
+  pub kernel_transform: f64,
   /** Time spend on transformation of the output or output gradient tensor, in seconds. */
-  output_transform: f64,
+  pub output_transform: f64,
   /** Time spend on multiplication-accumulation of transformed coefficients, in seconds. */
-  block_multiplication: f64,
+  pub block_multiplication: f64,
 }
 
 #[link(name = "nnpack_native", kind = "static")]
