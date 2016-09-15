@@ -10,8 +10,10 @@ use ffi::{
   pthreadpool_t,
 };
 
+use std::sync::{Arc};
+
 lazy_static! {
-  static ref _NNPACK_CTX: NnpackContext = NnpackContext::init();
+  static ref NNPACK_CTX: Arc<NnpackContext> = Arc::new(NnpackContext::init());
 }
 
 pub mod ffi;
@@ -30,11 +32,24 @@ impl Drop for NnpackContext {
 
 impl NnpackContext {
   pub fn init() -> NnpackContext {
+    println!("DEBUG: initializing nnpack...");
     let status = unsafe { nnp_initialize() };
     if status.is_err() {
       panic!("failed to initialize NNPACK: {:?}", status);
     }
     NnpackContext{}
+  }
+}
+
+pub struct NnpackHandle {
+  ctx:  Arc<NnpackContext>,
+}
+
+impl NnpackHandle {
+  pub fn new() -> NnpackHandle {
+    NnpackHandle{
+      ctx: (*NNPACK_CTX).clone(),
+    }
   }
 }
 
