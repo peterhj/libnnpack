@@ -32,7 +32,7 @@ impl Drop for NnpackContext {
 
 impl NnpackContext {
   pub fn init() -> NnpackContext {
-    println!("DEBUG: initializing nnpack...");
+    //println!("DEBUG: initializing nnpack...");
     let status = unsafe { nnp_initialize() };
     if status.is_err() {
       panic!("failed to initialize NNPACK: {:?}", status);
