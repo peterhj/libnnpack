@@ -9,4 +9,5 @@ name = "nnpack"
 path = "src/lib.rs"
 
 [dependencies]
+lazy_static = "*"
 libc = "*"

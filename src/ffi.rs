@@ -4,6 +4,7 @@ pub enum pthreadpool {}
 pub type pthreadpool_t = *mut pthreadpool;
 
 #[derive(Clone, Copy, Debug)]
+#[must_use]
 #[repr(C)]
 pub enum nnp_status {
   /** The call succeeded, and all output arguments now contain valid data. */
@@ -64,6 +65,19 @@ pub enum nnp_status {
   nnp_status_unsupported_hardware = 51,
   /** NNPACK failed to allocate memory for temporary buffers */
   nnp_status_out_of_memory = 52
+}
+
+impl nnp_status {
+  pub fn is_ok(&self) -> bool {
+    match *self {
+      nnp_status::nnp_status_success => true,
+      _ => false,
+    }
+  }
+
+  pub fn is_err(&self) -> bool {
+    !self.is_ok()
+  }
 }
 
 #[derive(Clone, Copy, Debug)]
