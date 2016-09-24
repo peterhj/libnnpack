@@ -1,0 +1,12 @@
+[submodule "ninja"]
+	path = ninja
+	url = https://github.com/peterhj/ninja.git
+	branch = release
+[submodule "PeachPy"]
+	path = PeachPy
+	url = https://github.com/peterhj/PeachPy.git
+	branch = master
+[submodule "NNPACK"]
+	path = NNPACK
+	url = https://github.com/peterhj/NNPACK.git
+	branch = peterhj-devel
