@@ -6,7 +6,6 @@ use std::process::{Command};
 fn main() {
   let manifest_dir = env::var("CARGO_MANIFEST_DIR").unwrap();
   let out_dir = env::var("OUT_DIR").unwrap();
-  //let target_triple = env::var("TARGET").unwrap();
 
   let mut venv_path = PathBuf::from(&out_dir);
   venv_path.push("env");
@@ -20,10 +19,10 @@ fn main() {
 
   let mut python = PathBuf::from(&venv_path);
   python.push("bin");
-  python.push("python");
+  python.push("python2.7");
   let mut pip = PathBuf::from(&venv_path);
   pip.push("bin");
-  pip.push("pip");
+  pip.push("pip-2.7");
 
   let mut ninja = PathBuf::from(&out_dir);
   ninja.push("ninja-build");
@@ -41,14 +40,9 @@ fn main() {
       .arg(ninja_config_path.to_str().unwrap())
       .arg("--bootstrap")
       .status().unwrap();
-    /*Command::new("cp")
-      .arg(ninja_build_path.join("ninja"))
-      .arg(ninja.to_str().unwrap())
-      .status().unwrap();*/
     Command::new(pip.to_str().unwrap())
       .current_dir(&out_dir)
-      .arg("install")
-      .arg("--upgrade")
+      .arg("install").arg("--upgrade")
       .arg("ninja-syntax")
       .status().unwrap();
   }
@@ -68,10 +62,8 @@ fn main() {
     peachpy_req_path.push("requirements.txt");
     Command::new(pip.to_str().unwrap())
       .current_dir(&out_dir)
-      .arg("install")
-      .arg("--upgrade")
-      .arg("-r")
-      .arg(peachpy_req_path.to_str().unwrap())
+      .arg("install").arg("--upgrade")
+      .arg("-r").arg(peachpy_req_path.to_str().unwrap())
       .status().unwrap();
     let mut peachpy_setup_path = PathBuf::from(&peachpy_build_path);
     peachpy_setup_path.push("setup.py");
@@ -82,20 +74,18 @@ fn main() {
       .status().unwrap();
     Command::new(pip.to_str().unwrap())
       .current_dir(peachpy_build_path.to_str().unwrap())
-      .arg("install")
-      .arg("--upgrade")
+      .arg("install").arg("--upgrade")
       .arg(peachpy_build_path.to_str().unwrap())
       .status().unwrap();
   }
 
-  let mut native_lib_path = PathBuf::from(&out_dir);
-  native_lib_path.push("libnnpack_native.a");
-  if !native_lib_path.exists() {
+  let mut nnpack_lib_dst_path = PathBuf::from(&out_dir);
+  nnpack_lib_dst_path.push("libnnpack_native.a");
+  if !nnpack_lib_dst_path.exists() {
     let mut nnpack_src_path = PathBuf::from(&manifest_dir);
     nnpack_src_path.push("NNPACK");
     let mut nnpack_build_path = PathBuf::from(&out_dir);
     nnpack_build_path.push("NNPACK-build");
-    //create_dir_all(&nnpack_build_path).ok();
     Command::new("cp")
       .current_dir(&out_dir)
       .arg("-r")
@@ -109,6 +99,7 @@ fn main() {
       .arg(nnpack_config_path.to_str().unwrap())
       .status().unwrap();
     Command::new(ninja.to_str().unwrap())
+      .env("PYTHONHOME", venv_path.to_str().unwrap())
       .current_dir(nnpack_build_path.to_str().unwrap())
       .status().unwrap();
     let mut nnpack_lib_path = PathBuf::from(&nnpack_build_path);
@@ -117,21 +108,9 @@ fn main() {
     Command::new("cp")
       .current_dir(&out_dir)
       .arg(nnpack_lib_path.to_str().unwrap())
-      .arg(native_lib_path.to_str().unwrap())
+      .arg(nnpack_lib_dst_path.to_str().unwrap())
       .status().unwrap();
   }
 
-  /*let mut artifacts_path = PathBuf::from(&manifest_dir);
-  artifacts_path.push(&format!("artifacts.{}", target_triple));
-  create_dir_all(&artifacts_path).ok();
-
-  let mut native_lib_path = PathBuf::from(&artifacts_path);
-  native_lib_path.push("libnnpack_native.a");
-  if !native_lib_path.exists() {
-    unimplemented!();
-  }*/
-
-  //println!("cargo:rustc-link-lib=static=nnpack_native");
-  //println!("cargo:rustc-link-search=native={}", artifacts_path.to_str().unwrap());
   println!("cargo:rustc-link-search=native={}", out_dir);
 }
