@@ -32,7 +32,6 @@ impl Drop for NnpackContext {
 
 impl NnpackContext {
   pub fn init() -> NnpackContext {
-    //println!("DEBUG: initializing nnpack...");
     let status = unsafe { nnp_initialize() };
     if status.is_err() {
       panic!("failed to initialize NNPACK: {:?}", status);
@@ -42,14 +41,12 @@ impl NnpackContext {
 }
 
 pub struct NnpackHandle {
-  ctx:  Arc<NnpackContext>,
+  _ctx: Arc<NnpackContext>,
 }
 
 impl NnpackHandle {
   pub fn new() -> NnpackHandle {
-    NnpackHandle{
-      ctx: (*NNPACK_CTX).clone(),
-    }
+    NnpackHandle{_ctx: (*NNPACK_CTX).clone()}
   }
 }
 
@@ -73,6 +70,10 @@ impl NnpackPthreadPool {
       raw:      raw,
       num_thrs: num_threads,
     }
+  }
+
+  pub fn num_threads(&self) -> usize {
+    self.num_thrs
   }
 
   pub unsafe fn as_raw(&self) -> pthreadpool_t {
