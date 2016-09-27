@@ -19,10 +19,10 @@ fn main() {
 
   let mut python = PathBuf::from(&venv_path);
   python.push("bin");
-  python.push("python2.7");
+  python.push("python");
   let mut pip = PathBuf::from(&venv_path);
   pip.push("bin");
-  pip.push("pip-2.7");
+  pip.push("pip");
 
   let mut ninja = PathBuf::from(&out_dir);
   ninja.push("ninja-build");
