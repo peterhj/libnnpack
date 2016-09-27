@@ -225,8 +225,39 @@ extern "C" {
       output: *mut f32,
       threadpool: pthreadpool_t,
   ) -> nnp_status;
-  pub fn nnp_max_pooling_output() -> nnp_status;
-  pub fn nnp_softmax_output() -> nnp_status;
-  pub fn nnp_relu_output() -> nnp_status;
-  pub fn nnp_relu_input_gradient() -> nnp_status;
+  pub fn nnp_max_pooling_output(
+      batch_size: size_t,
+      channels: size_t,
+      input_size: nnp_size,
+      input_padding: nnp_padding,
+      pooling_size: nnp_size,
+      pooling_stride: nnp_size,
+      input: *const f32,
+      output: *mut f32,
+      threadpool: pthreadpool_t,
+  ) -> nnp_status;
+  pub fn nnp_softmax_output(
+      batch_size: size_t,
+      channels: size_t,
+      input: *const f32,
+      output: *mut f32,
+      threadpool: pthreadpool_t,
+  ) -> nnp_status;
+  pub fn nnp_relu_output(
+      batch_size: size_t,
+      channels: size_t,
+      input: *const f32,
+      output: *mut f32,
+      negative_slope: f32,
+      threadpool: pthreadpool_t,
+  ) -> nnp_status;
+  pub fn nnp_relu_input_gradient(
+      batch_size: size_t,
+      channels: size_t,
+      grad_output: *const f32,
+      input: *const f32,
+      grad_input: *mut f32,
+      negative_slope: f32,
+      threadpool: pthreadpool_t,
+  ) -> nnp_status;
 }
